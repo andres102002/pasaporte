@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Agendamiento de Citas - Pasaporte Bogotá</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #004aad, #007bff);
+      color: white;
+    }
+    header {
+      text-align: center;
+      padding: 2rem;
+    }
+    header h1 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+    header p {
+      font-size: 1.1rem;
+      color: #dbe9ff;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    }
+    .btn {
+      display: inline-block;
+      margin-top: 1rem;
+      padding: 0.8rem 1.5rem;
+      font-size: 1.1rem;
+      color: white;
+      background: #0056d6;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.3s;
+    }
+    .btn:hover {
+      background: #003f9e;
+    }
+    form {
+      margin-top: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      text-align: left;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 0.8rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+    input:focus, textarea:focus {
+      outline: 2px solid #007bff;
+    }
+    button[type="submit"] {
+      background: #004aad;
+      color: white;
+      border: none;
+      padding: 0.8rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    button[type="submit"]:hover {
+      background: #003f9e;
+    }
+
+    /* Chatbot flotante */
+    .chat-button {
+      position: fixed;
+      bottom: 25px;
+      right: 25px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      font-size: 28px;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      transition: background 0.3s;
+    }
+    .chat-button:hover {
+      background-color: #0056d6;
+    }
+    .chat-box {
+      display: none;
+      position: fixed;
+      bottom: 100px;
+      right: 25px;
+      background: white;
+      color: black;
+      width: 300px;
+      border-radius: 15px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      padding: 1rem;
+    }
+    .chat-box.active {
+      display: block;
+    }
+    .chat-box h3 {
+      margin-top: 0;
+      color: #004aad;
+      text-align: center;
+    }
+    .chat-box input, .chat-box textarea {
+      width: 100%;
+      margin-bottom: 0.7rem;
+      padding: 0.6rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+    .chat-box button {
+      width: 100%;
+      background: #007bff;
+      color: white;
+      border: none;
+      padding: 0.6rem;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .chat-box button:hover {
+      background: #0056d6;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Agenda tu cita para pasaporte en Bogotá fácilmente</h1>
+    <p>Evita filas y complicaciones. Agenda tu cita de manera rápida y segura.</p>
+  </header>
+
+  <section class="container">
+    <a href="https://tramitesmre.cancilleria.gov.co/tramites/enlinea/agendamiento.xhtml" 
+       target="_blank" class="btn">
+      Ir al sitio oficial de la Cancillería
+    </a>
+
+    <h2 style="margin-top: 2rem;">Déjanos tus datos y te ayudamos</h2>
+    <form action="https://formsubmit.co/maicolmarquez2002@gmail.com" method="POST">
+      <input type="text" name="Nombre" placeholder="Nombre completo" required>
+      <input type="email" name="Correo" placeholder="Correo electrónico" required>
+      <input type="tel" name="Telefono" placeholder="Número de teléfono" required>
+      <textarea name="Mensaje" placeholder= "   dastos para la cita: 
+       1. nombre completo
+       2. cedula 
+       3. telefono 
+       4. sede a la que decedes 
+       5. hora" rows="4" required></textarea>
+      <button type="submit">Enviar datos</button>
+    </form>
+  </section>
+
+  <!-- Botón flotante de chat -->
+  <button class="chat-button" onclick="toggleChat()">💬</button>
+
+  <!-- Ventana del chat -->
+  <div class="chat-box" id="chatBox">
+    <h3>Chat de citas</h3>
+    <input type="text" id="chatName" placeholder="Tu nombre" required>
+    <input type="tel" id="chatPhone" placeholder="Tu número de teléfono" required>
+    <input type="email" id="chatEmail" placeholder="Tu correo" required>
+    <textarea id="chatMsg" placeholder="dastos para la cita: 
+       1. nombre completo
+       2. cedula 
+       3. telefono 
+       4. sede a la que decedes 
+       5. hora" rows="3" required></textarea>
+    <button onclick="sendWhatsApp()">Enviar por WhatsApp</button>
+  </div>
+
+  <script>
+    function toggleChat() {
+      document.getElementById('chatBox').classList.toggle('active');
+    }
+
+    function sendWhatsApp() {
+      const name = document.getElementById('chatName').value;
+      const phone = document.getElementById('chatPhone').value;
+      const email = document.getElementById('chatEmail').value;
+      const msg = document.getElementById('chatMsg').value;
+
+      if (!name || !phone || !email || !msg) {
+        alert("Por favor completa todos los campos.");
+        return;
+      }
+
+      const text = `Hola, soy ${name}.%0A📞 Teléfono: ${phone}%0A📧 Correo: ${email}%0A📝 Mensaje: ${msg}`;
+      const url = `https://wa.me/573209047403?text=${text}`;
+      window.open(url, '_blank');
+    }
+  </script>
+</body>
+</html>
