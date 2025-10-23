@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Agendamiento de Citas - Pasaporte Bogotá</title>
+
+  <!-- SEO básico -->
+  <meta name="description" content="Agenda fácilmente tu cita para pasaporte en Bogotá. Sin filas, sin complicaciones. Te guiamos paso a paso para agendar en la Cancillería.">
+  <meta name="robots" content="index, follow">
+  <meta property="og:title" content="Agendamiento de Citas - Pasaporte Bogotá">
+  <meta property="og:description" content="Agenda tu cita para pasaporte en Bogotá de forma rápida y segura.">
+  <meta property="og:image" content="https://andres102002.github.io/pasaporte/imagen-portada.jpg">
+  <meta property="og:url" content="https://andres102002.github.io/pasaporte/">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="es_CO">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <style>
+    :root{
+      --primary-700:#004aad;
+      --primary-600:#0056d6;
+      --primary-500:#007bff;
+      --glass: rgba(255,255,255,.12);
+      --text-soft:#dbe9ff;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body {
+      margin: 0;
+      font-family: 'Poppins', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color: white;
+      background: #001933;
+      overflow-x:hidden;
+    }
+
+    /* ========= Fondo con imágenes y overlay ========= */
+    .bg {
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      background: radial-gradient(1200px 800px at 80% 20%, rgba(0,123,255,.15), transparent 60%),
+                  linear-gradient(135deg, #001a33, #00244d 40%, #003b80);
+    }
+    .bg::before, .bg::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background-position:center;
+      background-size:cover;
+      background-repeat:no-repeat;
+      opacity:.18;           /* controla qué tanto se ven las fotos */
+      filter:contrast(1.1) saturate(1.1);
+      transition:opacity 1s ease;
+    }
+    /* Cambia estas rutas por tus imágenes */
+    .bg::before{ background-image:url("assets/fondo-1.jpg"); }
+    .bg::after { background-image:url("assets/fondo-2.jpg"); animation:fadeSwap 18s ease-in-out infinite; }
+
+    @keyframes fadeSwap{
+      0%,45%   {opacity:.18}
+      55%,100% {opacity:0}
+    }
+
+    /* ========= Layout principal ========= */
+    header {
+      text-align: center;
+      padding: 3rem 1.25rem 1.5rem;
+    }
+    header h1 {
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      margin: 0 0 .5rem;
+    }
+    header p { color: var(--text-soft); margin:.25rem 0 0 }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto 3rem;
+      padding: 0 1.25rem;
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 1.25rem;
+    }
+    @media (max-width: 900px){
+      .container{ grid-template-columns: 1fr; }
+    }
+
+    .card {
+      background: var(--glass);
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 20px;
+      box-shadow: 0 4px 20px rgba(0,0,0,.25);
+      backdrop-filter: blur(6px);
+    }
+
+    /* ========= CTA externo ========= */
+    .cta {
+      text-align:center;
+      padding:1.25rem;
+      margin: 0 auto 1rem;
+      max-width:1100px;
+    }
+    .btn {
+      display: inline-block;
+      padding: 0.9rem 1.5rem;
+      font-size: 1rem;
+      color: white;
+      background: var(--primary-600);
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: transform .12s ease, background .2s ease;
+    }
+    .btn:hover { background: var(--primary-700); transform: translateY(-1px); }
+
+    /* ========= Panel izquierdo: formulario ========= */
+    .panel {
+      padding: 1.25rem 1.25rem 1.5rem;
+    }
+    .panel h2{
+      margin: .25rem 0 1rem;
+      font-size: 1.25rem;
+    }
+    form {
+      display: grid;
+      gap: .85rem;
+    }
+    .row{
+      display:grid; gap:.85rem;
+      grid-template-columns: 1fr 1fr;
+    }
+    @media (max-width:700px){ .row{ grid-template-columns: 1fr; } }
+
+    label{ font-size:.92rem; color:#e5eeff; display:block; margin-bottom:.35rem;}
+    input, select, textarea{
+      width: 100%;
+      padding: .85rem .9rem;
+      border: 1px solid rgba(255,255,255,.18);
+      background: rgba(255,255,255,.08);
+      color: #fff;
+      border-radius: 10px;
+      font-size: .98rem;
+      outline: none;
+    }
+    input::placeholder, textarea::placeholder{ color:#c5d9ff; opacity:.85 }
+    input:focus, select:focus, textarea:focus { border-color: var(--primary-500); box-shadow: 0 0 0 2px rgba(0,123,255,.25); }
+
+    .help{
+      font-size:.86rem;color:#cfe1ff;margin-top:-.35rem;margin-bottom:.25rem;
+    }
+
+    .submit {
+      margin-top:.4rem;
+      display:flex; gap:.6rem; flex-wrap:wrap;
+      align-items:center;
+    }
+    .submit button[type="submit"]{
+      background: var(--primary-700);
+      color: white;
+      border: none;
+      padding: .9rem 1.5rem;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight:600;
+      transition: background .2s ease, transform .12s ease;
+    }
+    .submit button[type="submit"]:hover{ background:#003f9e; transform:translateY(-1px) }
+    .submit .secondary{
+      background: transparent;
+      border: 1px solid rgba(255,255,255,.2);
+      color:#fff;
+    }
+
+    /* ========= Panel derecho: clientes felices ========= */
+    .testimonials{
+      padding: 1.25rem;
+    }
+    .testimonials h2{ margin:.25rem 0 1rem; font-size:1.25rem;}
+    .grid{
+      display:grid;
+      gap:.75rem;
+      grid-template-columns: repeat(2, 1fr);
+    }
+    @media (max-width:520px){
+      .grid{grid-template-columns: 1fr;}
+    }
+    .tcard{
+      overflow:hidden;border-radius:16px;background:rgba(255,255,255,.09);
+      border:1px solid rgba(255,255,255,.14)
+    }
+    .tcard img{ width:100%; height:160px; object-fit:cover; display:block }
+    .tcard .tcopy{ padding:.65rem .8rem; }
+    .tcard .name{ font-weight:600; font-size:.98rem; }
+    .tcard .msg{ font-size:.9rem; color:#e9f2ff; opacity:.95 }
+
+    /* ========= Chat flotante (opcional, lo dejamos) ========= */
+    .chat-button {
+      position: fixed; bottom: 25px; right: 25px;
+      background-color: var(--primary-500);
+      color: white; border: none; border-radius: 50%;
+      width: 60px; height: 60px; font-size: 28px; cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      transition: background 0.3s;
+    }
+    .chat-button:hover { background-color: var(--primary-600); }
+    .chat-box {
+      display:none; position: fixed; bottom: 100px; right: 25px;
+      background: white; color: black; width: 300px; border-radius: 15px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3); padding: 1rem;
+    }
+    .chat-box.active { display:block }
+    .chat-box h3 { margin-top: 0; color: var(--primary-700); text-align: center; }
+    .chat-box input, .chat-box textarea {
+      width: 100%; margin-bottom: 0.7rem; padding: 0.6rem; border: 1px solid #ccc; border-radius: 8px;
+    }
+    .chat-box button {
+      width: 100%; background: var(--primary-500); color: white; border: none; padding: 0.6rem; border-radius: 8px; cursor: pointer;
+    }
+    .chat-box button:hover { background: var(--primary-600); }
+  </style>
+</head>
+<body>
+  <div class="bg" aria-hidden="true"></div>
+
+  <header>
+    <h1>Agenda tu cita para pasaporte en Bogotá fácilmente</h1>
+    <p>Evita filas y complicaciones. Agenda tu cita de manera rápida y segura.</p>
+  </header>
+
+  <div class="cta card">
+    <a class="btn" href="https://tramitesmre.cancilleria.gov.co/tramites/enlinea/agendamiento.xhtml" target="_blank" rel="noopener">
+      Ir al sitio oficial de la Cancillería
+    </a>
+  </div>
+
+  <main class="container">
+  <!-- ========== Panel izquierdo: Formulario mejorado ========== -->
+  <section class="panel card">
+    <h2>Déjanos tus datos y te ayudamos</h2>
+
+    <form id="mainForm"
+          action="https://formsubmit.co/maicolmarquez2002@gmail.com"
+          method="POST">
+
+      <!-- Configuración FormSubmit -->
+      <input type="hidden" name="_template" value="table">
+      <input type="hidden" name="_subject" value="Nueva solicitud de cita de pasaporte">
+      <input type="hidden" name="_captcha" value="false">
+      <input type="hidden" name="_next" value="https://andres102002.github.io/pasaporte/">
+
+      <div class="form-group">
+        <label for="Nombre">Nombre completo</label>
+        <input id="Nombre" name="Nombre" type="text" placeholder="Nombre completo" required>
+      </div>
+
+      <div class="row form-group">
+        <div>
+          <label for="Cedula">Cédula</label>
+          <input id="Cedula" name="Cedula" type="text" pattern="[0-9]{5,12}" placeholder="Solo números" required>
+          <small>Entre 5 y 12 dígitos</small>
+        </div>
+        <div>
+          <label for="Telefono">Número de teléfono</label>
+          <input id="Telefono" name="Telefono" type="tel" placeholder="Ej: 3209047403" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="Correo">Correo electrónico</label>
+        <input id="Correo" name="Correo" type="email" placeholder="correo@ejemplo.com" required>
+      </div>
+
+      <div class="form-group">
+        <label for="Oficina">Oficina de la Cancillería</label>
+        <select id="Oficina" name="Oficina" required>
+          <option value="" selected disabled>Selecciona una oficina</option>
+          <option>Bogotá - Sede Norte</option>
+          <option>Bogotá - Calle 53</option>
+          <option>Bogotá - Calle 24</option>
+          <option>Medellín - Gobernación de Antioquia</option>
+          <option>Cali - Gobernación del Valle</option>
+          <option>Barranquilla - Gobernación del Atlántico</option>
+          <option>Bucaramanga - Gobernación de Santander</option>
+          <option>Cartagena - Gobernación de Bolívar</option>
+          <option>Pereira - Gobernación de Risaralda</option>
+          <option>Manizales - Gobernación de Caldas</option>
+          <option>Santa Marta - Gobernación del Magdalena</option>
+          <option>Cúcuta - Gobernación de Norte de Santander</option>
+          <option>Neiva - Gobernación del Huila</option>
+          <option>Villavicencio - Gobernación del Meta</option>
+        </select>
+      </div>
+
+      <div class="row form-group">
+        <div>
+          <label for="Dia">Día deseado</label>
+          <input id="Dia" name="Dia" type="date" required>
+        </div>
+        <div>
+          <label for="Hora">Hora deseada</label>
+          <input id="Hora" name="Hora" type="time" min="08:00" max="17:00" step="900" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="Mensaje">Información adicional (opcional)</label>
+        <textarea id="Mensaje" name="Mensaje" rows="3" placeholder="Observaciones: disponibilidad, urgencia, acompañantes, etc."></textarea>
+      </div>
+
+      <div class="submit">
+        <button type="submit">Enviar datos</button>
+        <button type="button" class="secondary" id="previewBtn">Vista previa WhatsApp</button>
+      </div>
+    </form>
+  </section>
+
+  <!-- ========== Panel derecho: Clientes felices ========== -->
+  <aside class="testimonials card">
+    <h2>Clientes felices</h2>
+    <div class="grid">
+      <figure class="tcard">
+        <img src="assets/cliente-1.jpg" alt="Cliente feliz 1">
+        <figcaption class="tcopy">
+          <div class="name">Laura G.</div>
+          <div class="msg">“Agendé en minutos y me atendieron sin filas.”</div>
+        </figcaption>
+      </figure>
+
+      <figure class="tcard">
+        <img src="assets/cliente-2.jpg" alt="Cliente feliz 2">
+        <figcaption class="tcopy">
+          <div class="name">Carlos M.</div>
+          <div class="msg">“Muy rápido y claro. 100% recomendado.”</div>
+        </figcaption>
+      </figure>
+    </div>
+  </aside>
+</main>
+
+
+  <!-- Botón flotante de chat (opcional) -->
+  <button class="chat-button" onclick="toggleChat()" aria-label="Abrir chat">💬</button>
+
+  <div class="chat-box" id="chatBox" role="dialog" aria-modal="true" aria-labelledby="chatTitle">
+    <h3 id="chatTitle">Chat de citas</h3>
+    <input type="text" id="chatName" placeholder="Tu nombre">
+    <input type="tel" id="chatPhone" placeholder="Tu número de teléfono">
+    <input type="email" id="chatEmail" placeholder="Tu correo">
+    <textarea id="chatMsg" placeholder="Mensaje breve" rows="3"></textarea>
+    <button onclick="sendWhatsApp()">Enviar por WhatsApp</button>
+  </div>
+
+  <script>
+    // ====== utilidades ======
+    const WHATSAPP_OWNER = "573209047403"; // Tu WhatsApp (cámbialo si es necesario)
+
+    function toggleChat() {
+      document.getElementById('chatBox').classList.toggle('active');
+    }
+
+    function buildWAText(data){
+      const {
+        nombre, cedula, telefono, correo,
+        oficina, dia, hora, msg
+      } = data;
+
+      const lines = [
+        `*Solicitud de cita de pasaporte*`,
+        `👤 Nombre: ${nombre}`,
+        `🪪 Cédula: ${cedula}`,
+        `📞 Teléfono: ${telefono}`,
+        `📧 Correo: ${correo}`,
+        `🏢 Oficina: ${oficina}`,
+        `📅 Día: ${dia}`,
+        `🕘 Hora: ${hora}`,
+        msg ? `📝 Mensaje: ${msg}` : null
+      ].filter(Boolean);
+
+      return encodeURIComponent(lines.join("\n"));
+    }
+
+    function openWAWithData(formData){
+      const text = buildWAText(formData);
+      const url  = `https://wa.me/${WHATSAPP_OWNER}?text=${text}`;
+      window.open(url, "_blank"); // abre tu chat en una nueva pestaña
+    }
+
+    // ====== envío desde el chat flotante ======
+    function sendWhatsApp(){
+      const name  = document.getElementById('chatName').value.trim();
+      const phone = document.getElementById('chatPhone').value.trim();
+      const email = document.getElementById('chatEmail').value.trim();
+      const msg   = document.getElementById('chatMsg').value.trim();
+
+      if(!name || !phone || !email){
+        alert("Por favor completa nombre, teléfono y correo.");
+        return;
+      }
+
+      openWAWithData({
+        nombre:name, cedula:"(no aplica en chat)",
+        telefono:phone, correo:email,
+        oficina:"(no indicada)", dia:"(no indicado)", hora:"(no indicada)",
+        msg
+      });
+    }
+
+    // ====== envío del formulario principal ======
+    const form = document.getElementById('mainForm');
+    const previewBtn = document.getElementById('previewBtn');
+
+    // Previsualización rápida del texto de WhatsApp
+    previewBtn.addEventListener('click', () => {
+      const data = readForm();
+      const preview = decodeURIComponent(buildWAText(data));
+      alert("Vista previa del mensaje a WhatsApp:\n\n" + preview);
+    });
+
+    function readForm(){
+      const nombre   = document.getElementById('Nombre').value.trim();
+      const cedula   = document.getElementById('Cedula').value.trim();
+      const telefono = document.getElementById('Telefono').value.trim();
+      const correo   = document.getElementById('Correo').value.trim();
+      const oficina  = document.getElementById('Oficina').value;
+      const dia      = document.getElementById('Dia').value;
+      const hora     = document.getElementById('Hora').value;
+      const msg      = document.getElementById('Mensaje').value.trim();
+
+      return { nombre, cedula, telefono, correo, oficina, dia, hora, msg };
+    }
+
+    // Ponemos "min" del día como hoy para evitar fechas pasadas
+    (function setMinDate(){
+      const today = new Date();
+      const yyyy = today.getFullYear();
+      const mm = String(today.getMonth()+1).padStart(2,'0');
+      const dd = String(today.getDate()).padStart(2,'0');
+      document.getElementById('Dia').setAttribute('min', `${yyyy}-${mm}-${dd}`);
+    })();
+
+    form.addEventListener('submit', (e) => {
+      // Le dejamos enviar al correo (FormSubmit),
+      // pero también abrimos WhatsApp con la misma info.
+      const data = readForm();
+
+      // Validación simple adicional (por si el navegador no la hace)
+      if(!data.nombre || !data.cedula || !data.telefono || !data.correo || !data.oficina || !data.dia || !data.hora){
+        e.preventDefault();
+        alert("Por favor completa todos los campos obligatorios.");
+        return;
+      }
+
+      // Abrir WhatsApp en nueva pestaña
+      openWAWithData(data);
+
+      // TIP: Si alguna vez quisieras *evitar* enviar al correo,
+      // descomenta la línea de abajo para detener el submit.
+      // e.preventDefault();
+    });
+  </script>
+</body>
+</html>
