@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://andres102002.github.io/pasaporte/sitemap.xml
